@@ -32,13 +32,11 @@ import androidx.lifecycle.Observer;
      * @param data
      */
     void write(HttpMessage data) {
-        if (mChannel != null) {
-            //判断是否主线程
-            if ( Looper.getMainLooper().equals(Looper.myLooper())) {
-                mChannel.setValue(data);
-            } else {
-                mChannel.postValue(data);
-            }
+        //判断是否主线程
+        if ( Looper.getMainLooper().equals(Looper.myLooper())) {
+            mChannel.setValue(data);
+        } else {
+            mChannel.postValue(data);
         }
     }
 
@@ -50,21 +48,19 @@ import androidx.lifecycle.Observer;
      */
     @MainThread
     void read(@NonNull LifecycleOwner owner, @NonNull final HttpCallback callback) {
-        if (mChannel != null) {
-            mChannel.observe(owner,
-                    new Observer<HttpMessage>() {
-                        @Override
-                        public void onChanged(HttpMessage httpMessage) {
-                            if (httpMessage.isSucceed) {
-                                callback.onSucceed(httpMessage, httpMessage.tag);
-                            } else {
-                                callback.onFailure(httpMessage);
-                            }
-                            httpMessage.recycle();//回收
+        mChannel.observe(owner,
+                new Observer<HttpMessage>() {
+                    @Override
+                    public void onChanged(HttpMessage httpMessage) {
+                        if (httpMessage.isSucceed) {
+                            callback.onSucceed(httpMessage);
+                        } else {
+                            callback.onFailure(httpMessage);
                         }
+                        httpMessage.recycle();//回收
                     }
-            );
-        }
+                }
+        );
     }
 
 
@@ -73,15 +69,13 @@ import androidx.lifecycle.Observer;
             @Override
             public void onChanged(HttpMessage httpMessage) {
                 if (httpMessage.isSucceed) {
-                    callback.onSucceed(httpMessage, httpMessage.tag);
+                    callback.onSucceed(httpMessage);
                 } else {
                     callback.onFailure(httpMessage);
                 }
                 httpMessage.recycle();
             }
         });
-
-
     }
 
 

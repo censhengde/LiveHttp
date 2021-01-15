@@ -15,7 +15,7 @@ public interface HttpEngine {
      * Get异步请求
      * @param request
      */
-    void getAsync(@NonNull HttpService.GetRequest request);
+    void getAsync(@NonNull GetRequest request);
 
 
     /**
@@ -24,13 +24,13 @@ public interface HttpEngine {
      * @return
      */
     @NonNull
-    HttpMessage getSync(@NonNull HttpService.GetRequest request);
+    HttpMessage getSync(@NonNull GetRequest request);
 
     /**
      * Post异步请求
      * @param request
      */
-    void postAsync(@NonNull HttpService.PostRequest request);
+    void postAsync(@NonNull PostRequest request);
 
     /**
      * Post同步步请求
@@ -38,7 +38,7 @@ public interface HttpEngine {
      * @return
      */
     @NonNull
-    HttpMessage postSync(@NonNull HttpService.PostRequest request);
+    HttpMessage postSync(@NonNull PostRequest request);
 
 
 

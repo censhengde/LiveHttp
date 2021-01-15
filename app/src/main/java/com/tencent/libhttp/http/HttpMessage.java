@@ -188,7 +188,7 @@ public final class HttpMessage {
      * @return
      */
     public @Nullable
-    String getTargetString(String json, String key) {
+    String getValueByKey(String json, String key) {
         JSONObject object = JSON.parseObject(json);
         String result = "--";
         if (object != null) {
@@ -204,7 +204,7 @@ public final class HttpMessage {
      * @return
      */
     public @Nullable
-    String getTargetString(String json, int index) {
+    String getValueByIndex(String json, int index) {
         JSONArray object = JSON.parseArray(json);
         String result = "--";
         if (object != null) {
@@ -217,9 +217,10 @@ public final class HttpMessage {
     public String toString() {
         return "HttpMessage{" +
                 "isSucceed=" + isSucceed +
+                ", msg='" + msg + '\'' +
                 ", tag=" + tag +
-                ", body:" +
-                convertToString() +
+                ", body=" + body +
+                ", bodyStr='" + bodyStr + '\'' +
                 '}';
     }
 }

@@ -2,6 +2,7 @@ package com.tencent.libhttp.http;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.UiThread;
 
 /**
  * Author：Shengde·Cen on 2020/11/4 15:36
@@ -9,10 +10,9 @@ import androidx.annotation.Nullable;
  * 说明：
  */
 public interface HttpCallback {
-//    void onStart(Object tag);
-
-    void onSucceed(@NonNull HttpMessage msg, @Nullable Object tag);
-
+    @UiThread//
+    void onSucceed(@NonNull HttpMessage msg);
+    @UiThread
     void onFailure(@NonNull HttpMessage msg);
 
 }

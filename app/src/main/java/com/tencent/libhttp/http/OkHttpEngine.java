@@ -1,18 +1,9 @@
 package com.tencent.libhttp.http;
 
 import android.util.Log;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.tencent.libhttp.http.HttpService.GetRequest;
-import com.tencent.libhttp.http.HttpService.PostRequest;
-import okhttp3.internal.http2.Header;
-import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
 import java.util.Map;
-
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -20,13 +11,15 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Author：Shengde·Cen on 2020/11/4 15:50
  * <p>
  * 说明：采用LiveData解决网络数据回调但页面已经不存在的安全隐患
  */
-public final class OkHttpEngine implements HttpEngine {
+final class OkHttpEngine implements HttpEngine {
 
     private final OkHttpClient mClient;
     private static final boolean DEBUG = true;
@@ -35,7 +28,7 @@ public final class OkHttpEngine implements HttpEngine {
     /**
      * okhttp配置
      */
-    public OkHttpEngine() {
+    OkHttpEngine() {
         OkHttpClient.Builder clientBuilder = new OkHttpClient.Builder();
         // try {
         // SSLContext sslContext;
@@ -59,17 +52,20 @@ public final class OkHttpEngine implements HttpEngine {
         final Object tag = request.tag;
         final HttpChannel channel = request.channel;
         showLog(url);
+
         final Request okRequest = createGetRequest(url, params, header);
         Call call = mClient.newCall(okRequest);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
+                debugSleep(5000);
                 final HttpMessage msg = HttpMessage.obtain();
                 msg.tag = tag;
                 msg.isSucceed = false;
                 msg.msg = e.getMessage();
                 if (channel != null) {
+                    showLog("数据返回："+msg);
                     channel.write(msg);
                 }
 
@@ -78,16 +74,19 @@ public final class OkHttpEngine implements HttpEngine {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 final HttpMessage msg = HttpMessage.obtain();
+                debugSleep(5000);
                 msg.tag = tag;
                 if (response.isSuccessful()) {
                     msg.isSucceed = true;
-                    if (response.body() != null) {
-                        msg.bodyStr = response.body().string();
+                    ResponseBody body = response.body();
+                    if (body != null) {
+                        msg.bodyStr = body.string();
                     }
                 } else {
                     msg.isSucceed = false;
                 }
                 if (channel != null) {
+                    showLog("数据返回："+msg);
                     channel.write(msg);
                 }
 
@@ -116,7 +115,10 @@ public final class OkHttpEngine implements HttpEngine {
         try {
             response = call.execute();
             if (response.isSuccessful()) {
-                msg.bodyStr = response.body().string();
+                ResponseBody body = response.body();
+                if (body != null) {
+                    msg.bodyStr = body.string();
+                }
                 msg.isSucceed = true;
             } else {
                 msg.isSucceed = false;
@@ -160,7 +162,10 @@ public final class OkHttpEngine implements HttpEngine {
                 if (response.isSuccessful()) {
                     try {
                         msg.isSucceed = true;
-                        msg.bodyStr = response.body().string();
+                        ResponseBody body = response.body();
+                        if (body != null) {
+                            msg.bodyStr = body.string();
+                        }
                     } catch (IOException e) {
                         e.printStackTrace();
                         msg.isSucceed = false;
@@ -194,7 +199,10 @@ public final class OkHttpEngine implements HttpEngine {
             response = call.execute();
             if (response.isSuccessful()) {
                 msg.isSucceed = true;
-                msg.bodyStr = response.body().string();
+                ResponseBody body = response.body();
+                if (body != null) {
+                    msg.bodyStr = body.string();
+                }
             } else {
                 msg.isSucceed = false;
                 msg.msg = response.message();
@@ -261,11 +269,13 @@ public final class OkHttpEngine implements HttpEngine {
         return builder.build();
     }
 
-    private void sleep(long ms) {
+    private void debugSleep(long ms) {
+        if (DEBUG){
         try {
             Thread.sleep(ms);
         } catch (InterruptedException ex) {
             ex.printStackTrace();
+        }
         }
     }
 

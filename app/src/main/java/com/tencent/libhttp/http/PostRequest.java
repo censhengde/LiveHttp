@@ -5,6 +5,74 @@ package com.tencent.libhttp.http;
  *
  * 说明：
  */
-public class PostRequest {
 
+import static com.tencent.libhttp.http.HttpService.sEngine;
+
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+/**
+ * Post请求
+ */
+public  final class PostRequest extends OneRequest {
+
+     PostRequest(String url) {
+        super(url);
+    }
+
+    @Override
+    public HttpMessage doSync() {
+        tag = tag == null ? tag = url : tag;
+        return sEngine.postSync(this);
+    }
+
+    @Override
+    public void doAsync(HttpCallback callback) {
+        tag = tag == null ? tag = url : tag;
+        this.channel = HttpChannel.newInstance();
+        channel.readForever(callback);
+        sEngine.postAsync(this);
+    }
+
+    @Override
+    public void doAsync(LifecycleOwner owner, HttpCallback callback) {
+        tag = tag == null ? tag = url : tag;
+        this.channel = HttpChannel.newInstance();
+        channel.read(owner, callback);
+        sEngine.postAsync(this);
+    }
+
+    @Deprecated
+    @Override
+    public void doAsync(LifecycleOwner owner, final Object observer) {
+        this.channel = HttpChannel.newInstance();
+        tag = tag == null ? url : tag;
+        final Method target = resolveObserver(observer, (String) tag);
+        if (target == null) {
+            return;
+        }
+        target.setAccessible(true);
+        channel.read(owner, new HttpCallback() {
+            @Override
+            public void onSucceed(@NonNull HttpMessage msg) {
+                try {
+                    target.invoke(observer, msg);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull HttpMessage msg) {
+                try {
+                    target.invoke(observer, msg);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        sEngine.postAsync(this);
+    }
 }
