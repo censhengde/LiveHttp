@@ -6,5 +6,8 @@ package com.tencent.libhttp;
  * 说明：
  */
 public class UserBean {
+    public String name;
+    public String gender;
+    public String age;
 
 }

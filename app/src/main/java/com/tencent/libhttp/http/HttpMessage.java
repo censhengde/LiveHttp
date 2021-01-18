@@ -1,16 +1,11 @@
 package com.tencent.libhttp.http;
 
-import android.os.Message;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.util.Pools;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,8 +92,19 @@ public final class HttpMessage {
 
     public @Nullable
     <T> T parseObject(Class<T> tClass) {
-        final String json = bodyStr;
-        return parseObject(json, tClass);
+        return parseObject(tClass, null);
+    }
+
+    public @Nullable
+    <T> T parseObject(Class<T> tClass, @Nullable String key) {
+        T res = null;
+        try {
+            final String json = key == null ? asString() : getValueByKey(key);
+            res = parseObject(json, tClass);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 
     /**
@@ -118,10 +124,15 @@ public final class HttpMessage {
 
     public @Nullable
     <T> List<T> parseArray(Class<T> tClass) {
+        return parseArray(tClass, -1);
+    }
 
+    public @Nullable
+    <T> List<T> parseArray(Class<T> tClass, int index) {
         List<T> res = null;
         try {
-            res = parseArray(bodyStr, tClass);
+            final String json = index < 0 ? asString() : getValueByIndex(index);
+            res = parseArray(json, tClass);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -189,10 +200,28 @@ public final class HttpMessage {
      */
     public @Nullable
     String getValueByKey(String json, String key) {
-        JSONObject object = JSON.parseObject(json);
-        String result = "--";
-        if (object != null) {
-            result = object.getString(key);
+        String result = null;
+        try {
+            JSONObject object = JSON.parseObject(json);
+            if (object != null) {
+                result = object.getString(key);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public @Nullable
+    String getValueByKey(String key) {
+        String result = null;
+        try {
+            JSONObject object = JSON.parseObject(asString());
+            if (object != null) {
+                result = object.getString(key);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return result;
     }
@@ -205,10 +234,28 @@ public final class HttpMessage {
      */
     public @Nullable
     String getValueByIndex(String json, int index) {
-        JSONArray object = JSON.parseArray(json);
-        String result = "--";
-        if (object != null) {
-            result = object.getString(index);
+        String result = null;
+        try {
+            JSONArray object = JSON.parseArray(json);
+            if (object != null) {
+                result = object.getString(index);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public @Nullable
+    String getValueByIndex(int index) {
+        String result = null;
+        try {
+            JSONArray object = JSON.parseArray(asString());
+            if (object != null) {
+                result = object.getString(index);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return result;
     }

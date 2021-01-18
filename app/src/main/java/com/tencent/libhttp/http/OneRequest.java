@@ -37,7 +37,7 @@ public  abstract class OneRequest {
         }
     }
 
-    public OneRequest withParam(@NonNull String key, @NonNull Object value) {
+    public OneRequest addParam(@NonNull String key, @NonNull Object value) {
         if (params == null) {
             params = new ArrayMap<>(6);
         }

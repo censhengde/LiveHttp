@@ -53,7 +53,7 @@ final class OkHttpEngine implements HttpEngine {
         final HttpChannel channel = request.channel;
         showLog(url);
 
-        final Request okRequest = createGetRequest(url, params, header);
+        final Request okRequest = createGetRequest(url, header);
         Call call = mClient.newCall(okRequest);
         call.enqueue(new Callback() {
             @Override
@@ -107,7 +107,7 @@ final class OkHttpEngine implements HttpEngine {
         final Map<String, String> header = request.header;
         final Object tag = request.tag;
         showLog(url);
-        final Request okRequest = createGetRequest(url, params, header);
+        final Request okRequest = createGetRequest(url, header);
         final Call call = mClient.newCall(okRequest);
         Response response = null;
         final HttpMessage msg = HttpMessage.obtain();
@@ -254,11 +254,10 @@ final class OkHttpEngine implements HttpEngine {
      * 创建get请求
      *
      * @param url
-     * @param params
      * @param header
      * @return
      */
-    private Request createGetRequest(String url, Map<String, Object> params, Map<String, String> header) {
+    private Request createGetRequest(String url, Map<String, String> header) {
         final Request.Builder builder = new Request.Builder();
         builder.get().url(url);
         if (header != null && !header.isEmpty()) {
@@ -269,6 +268,7 @@ final class OkHttpEngine implements HttpEngine {
         return builder.build();
     }
 
+    /*模拟耗时*/
     private void debugSleep(long ms) {
         if (DEBUG){
         try {

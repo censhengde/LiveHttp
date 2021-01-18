@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void request(View view) {
-        String url = "";
+        String url = "http//:www.xxx.com";
         HttpService.get(url)
                 .addParam("param1", "value1")
                 .addParam("param2", "value2")
