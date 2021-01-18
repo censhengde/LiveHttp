@@ -1,4 +1,4 @@
-package com.tencent.libhttp;
+package com.tencent.example;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.tencent.libhttp.http.HttpCallback;
-import com.tencent.libhttp.http.HttpMessage;
-import com.tencent.libhttp.http.HttpService;
+import com.tencent.lib.http.HttpCallback;
+import com.tencent.lib.http.HttpMessage;
+import com.tencent.lib.http.HttpService;
 
 public class MainActivity extends AppCompatActivity {
   TextView mTvContent;

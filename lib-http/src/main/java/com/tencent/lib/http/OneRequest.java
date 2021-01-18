@@ -1,6 +1,6 @@
-package com.tencent.libhttp.http;
+package com.tencent.lib.http;
 
-import static com.tencent.libhttp.http.HttpService.sCommonHeader;
+import static com.tencent.lib.http.HttpService.sCommonHeader;
 
 import android.util.ArrayMap;
 import androidx.annotation.NonNull;

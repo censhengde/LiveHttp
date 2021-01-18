@@ -1,6 +1,12 @@
-package com.tencent.libhttp.http;
+package com.tencent.lib.http;
 
-import static com.tencent.libhttp.http.HttpService.sEngine;
+/**
+ * Author：岑胜德 on 2021/1/15 17:27
+ *
+ * 说明：
+ */
+
+import static com.tencent.lib.http.HttpService.sEngine;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
@@ -8,40 +14,37 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
- * Author：岑胜德 on 2021/1/15 17:25
- *
- * 说明：
+ * Post请求
  */
-public  final class GetRequest extends OneRequest {
+public  final class PostRequest extends OneRequest {
 
-    GetRequest(String url) {
+     PostRequest(String url) {
         super(url);
     }
 
     @Override
     public HttpMessage doSync() {
-        this.url = appendUrl(url, params);
-        return sEngine.getSync(this);
+        tag = tag == null ? tag = url : tag;
+        return sEngine.postSync(this);
     }
 
     @Override
     public void doAsync(HttpCallback callback) {
+        tag = tag == null ? tag = url : tag;
         this.channel = HttpChannel.newInstance();
         channel.readForever(callback);
-        tag = tag == null ? url : tag;
-        this.url = appendUrl(url, params);
-        sEngine.getAsync(this);
+        sEngine.postAsync(this);
     }
 
     @Override
     public void doAsync(LifecycleOwner owner, HttpCallback callback) {
+        tag = tag == null ? tag = url : tag;
         this.channel = HttpChannel.newInstance();
         channel.read(owner, callback);
-        tag = tag == null ? url : tag;
-        this.url = appendUrl(url, params);
-        sEngine.getAsync(this);
+        sEngine.postAsync(this);
     }
 
+    @Deprecated
     @Override
     public void doAsync(LifecycleOwner owner, final Object observer) {
         this.channel = HttpChannel.newInstance();
@@ -70,8 +73,6 @@ public  final class GetRequest extends OneRequest {
                 }
             }
         });
-        this.url = appendUrl(url, params);
-        sEngine.getAsync(this);
+        sEngine.postAsync(this);
     }
 }
-

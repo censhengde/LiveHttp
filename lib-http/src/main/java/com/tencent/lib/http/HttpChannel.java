@@ -1,4 +1,4 @@
-package com.tencent.libhttp.http;
+package com.tencent.lib.http;
 
 import android.os.Looper;
 

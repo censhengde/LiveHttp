@@ -1,9 +1,6 @@
-package com.tencent.libhttp.http;
+package com.tencent.lib.http;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import java.util.Map;
 
 /**
  * Author：Shengde·Cen on 2020/11/4 15:34

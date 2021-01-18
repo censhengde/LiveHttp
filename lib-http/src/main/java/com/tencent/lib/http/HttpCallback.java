@@ -1,7 +1,6 @@
-package com.tencent.libhttp.http;
+package com.tencent.lib.http;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
 
 /**

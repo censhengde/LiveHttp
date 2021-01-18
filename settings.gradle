@@ -1,2 +1,3 @@
 rootProject.name='LibHttp'
 include ':app'
+include ':lib-http'

@@ -1,16 +1,9 @@
-package com.tencent.libhttp.http;
-
-import android.util.ArrayMap;
+package com.tencent.lib.http;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URLEncoder;
 import java.util.Map;
 
 /**

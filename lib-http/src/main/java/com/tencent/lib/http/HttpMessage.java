@@ -1,4 +1,4 @@
-package com.tencent.libhttp.http;
+package com.tencent.lib.http;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
@@ -34,7 +34,7 @@ public final class HttpMessage {
 
     public boolean isSucceed = false;
     public String msg = "--";
-    public Object tag;//标识符，用来区别每个请求的响应数据。
+    public Object tag;//标识符，用来区别每个请求的响应数据。（保留字段）
     @Nullable
     InputStream body;
     @Nullable
