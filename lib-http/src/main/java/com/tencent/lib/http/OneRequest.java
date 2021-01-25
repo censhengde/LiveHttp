@@ -32,7 +32,7 @@ public  abstract class OneRequest {
     OneRequest(@NonNull String url) {
         this.url = url;
         if (sCommonHeader != null) {
-            header = new ArrayMap<>();
+            header = new ArrayMap<>(sCommonHeader.size()+3);
             header.putAll(sCommonHeader);
         }
     }
@@ -58,27 +58,27 @@ public  abstract class OneRequest {
      *
      * @return
      */
-    public abstract HttpMessage doSync();
+    public abstract HttpMessage execute();
 
     /**
      * 不能自动移除Callbak式
      *
      * @param callback
      */
-    public abstract void doAsync(@NonNull HttpCallback callback);
+    public abstract void enqueue(@NonNull HttpCallback callback);
 
     /**
      * 自动移除Callbak式
      *
      * @param callback
      */
-    public abstract void doAsync(@NonNull LifecycleOwner owner, @NonNull HttpCallback callback);
+    public abstract void enqueue(@NonNull LifecycleOwner owner, @NonNull HttpCallback callback);
 
     /**
      * 自动移除Callbak式+注解方法监听回调式
      */
     @Deprecated//设计不太成熟，先别用
-    public abstract void doAsync(LifecycleOwner owner, final Object observer);
+    public abstract void enqueue(LifecycleOwner owner, final Object observer);
 
     protected final @Nullable
     Method resolveObserver(Object o, String key) {

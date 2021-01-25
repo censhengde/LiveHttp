@@ -2,8 +2,6 @@ package com.tencent.lib.http;
 
 import androidx.annotation.NonNull;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Map;
 
 /**
@@ -37,7 +35,8 @@ public final class HttpService {
         return new PostRequest(url);
     }
 
-    public static void download(@NonNull String url) {
+    public static DownloadRequest download(@NonNull String url) {
+        return new DownloadRequest(url);
     }
 
 }

@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
                 .addParam("param1", "value1")
                 .addParam("param2", "value2")
                 .addParam("param3", "value3")
-                .doAsync(this, new HttpCallback() {
+                .enqueue(this, new HttpCallback() {
             @Override
             public void onSucceed(@NonNull HttpMessage msg) {
                 UserBean user = msg.parseObject(UserBean.class);//解析对象。

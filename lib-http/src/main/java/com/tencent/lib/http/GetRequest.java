@@ -19,13 +19,13 @@ public  final class GetRequest extends OneRequest {
     }
 
     @Override
-    public HttpMessage doSync() {
+    public HttpMessage execute() {
         this.url = appendUrl(url, params);
         return sEngine.getSync(this);
     }
 
     @Override
-    public void doAsync(HttpCallback callback) {
+    public void enqueue(HttpCallback callback) {
         this.channel = HttpChannel.newInstance();
         channel.readForever(callback);
         tag = tag == null ? url : tag;
@@ -34,7 +34,7 @@ public  final class GetRequest extends OneRequest {
     }
 
     @Override
-    public void doAsync(LifecycleOwner owner, HttpCallback callback) {
+    public void enqueue(LifecycleOwner owner, HttpCallback callback) {
         this.channel = HttpChannel.newInstance();
         channel.read(owner, callback);
         tag = tag == null ? url : tag;
@@ -43,7 +43,7 @@ public  final class GetRequest extends OneRequest {
     }
 
     @Override
-    public void doAsync(LifecycleOwner owner, final Object observer) {
+    public void enqueue(LifecycleOwner owner, final Object observer) {
         this.channel = HttpChannel.newInstance();
         tag = tag == null ? url : tag;
         final Method target = resolveObserver(observer, (String) tag);

@@ -23,13 +23,13 @@ public  final class PostRequest extends OneRequest {
     }
 
     @Override
-    public HttpMessage doSync() {
+    public HttpMessage execute() {
         tag = tag == null ? tag = url : tag;
         return sEngine.postSync(this);
     }
 
     @Override
-    public void doAsync(HttpCallback callback) {
+    public void enqueue(HttpCallback callback) {
         tag = tag == null ? tag = url : tag;
         this.channel = HttpChannel.newInstance();
         channel.readForever(callback);
@@ -37,7 +37,7 @@ public  final class PostRequest extends OneRequest {
     }
 
     @Override
-    public void doAsync(LifecycleOwner owner, HttpCallback callback) {
+    public void enqueue(LifecycleOwner owner, HttpCallback callback) {
         tag = tag == null ? tag = url : tag;
         this.channel = HttpChannel.newInstance();
         channel.read(owner, callback);
@@ -46,7 +46,7 @@ public  final class PostRequest extends OneRequest {
 
     @Deprecated
     @Override
-    public void doAsync(LifecycleOwner owner, final Object observer) {
+    public void enqueue(LifecycleOwner owner, final Object observer) {
         this.channel = HttpChannel.newInstance();
         tag = tag == null ? url : tag;
         final Method target = resolveObserver(observer, (String) tag);
