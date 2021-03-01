@@ -8,9 +8,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import com.tencent.lib.http.HttpCallback;
-import com.tencent.lib.http.HttpMessage;
-import com.tencent.lib.http.HttpService;
+import com.tencent.livehttp.core.HttpCallback;
+import com.tencent.livehttp.core.Response;
+import com.tencent.livehttp.core.LiveHttp;
 
 public class MainActivity extends AppCompatActivity {
   TextView mTvContent;
@@ -23,13 +23,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void request(View view) {
         String url = "http//:www.xxx.com";
-        HttpService.get(url)
+        LiveHttp.get(url)
                 .addParam("param1", "value1")
                 .addParam("param2", "value2")
                 .addParam("param3", "value3")
                 .enqueue(this, new HttpCallback() {
             @Override
-            public void onSucceed(@NonNull HttpMessage msg) {
+            public void onSucceed(@NonNull Response msg) {
                 UserBean user = msg.parseObject(UserBean.class);//解析对象。
 //                user=msg.parseObject(UserBean.class,"key");//根据key来解析特定json字段。
 //                List<UserBean> users=msg.parseArray(UserBean.class);//解析数组。
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(@NonNull HttpMessage msg) {
+            public void onFailure(@NonNull Response msg) {
                 Toast.makeText(MainActivity.this,"failure"+msg,Toast.LENGTH_SHORT).show();
                 mTvContent.setText(msg.toString());
 
